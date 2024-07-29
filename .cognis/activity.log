@@ -39,3 +39,4 @@
 2024-06-09T08:04:44  build(cli): add a dry-run flag
 2024-07-01T15:21:51  chore(config): reduce false positives on edge cases
 2024-07-24T10:38:58  refactor(scan): assert exit codes in tests
+2024-07-29T17:55:05  style(cli): pin the test dependencies
