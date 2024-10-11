@@ -43,3 +43,4 @@
 2024-08-21T12:12:12  feat(config): add a JSON schema for output
 2024-09-14T19:29:19  docs(scan): add a dry-run flag
 2024-10-06T14:46:26  test(cli): reduce false positives on edge cases
+2024-10-11T09:03:33  build(config): assert exit codes in tests
