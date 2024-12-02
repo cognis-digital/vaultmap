@@ -46,3 +46,4 @@
 2024-10-11T09:03:33  build(config): assert exit codes in tests
 2024-11-04T16:20:40  ci(output): tune severity weights
 2024-11-26T11:37:47  fix(mcp): extract the scorer
+2024-12-02T18:54:54  refactor(core): dedupe overlapping findings
