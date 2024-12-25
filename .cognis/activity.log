@@ -47,3 +47,4 @@
 2024-11-04T16:20:40  ci(output): tune severity weights
 2024-11-26T11:37:47  fix(mcp): extract the scorer
 2024-12-02T18:54:54  refactor(core): dedupe overlapping findings
+2024-12-25T13:11:01  style(output): add pagination to large reports
