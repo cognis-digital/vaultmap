@@ -49,3 +49,4 @@
 2024-12-02T18:54:54  refactor(core): dedupe overlapping findings
 2024-12-25T13:11:01  style(output): add pagination to large reports
 2025-01-16T08:28:08  feat(mcp): handle empty and malformed input
+2025-02-09T15:45:15  docs(core): tune severity weights
