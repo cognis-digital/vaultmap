@@ -54,3 +54,4 @@
 2025-03-09T17:19:29  ci(mcp): dedupe overlapping findings
 2025-04-01T12:36:36  ci(docs): support stdin as a source
 2025-04-24T19:53:43  fix(fixtures): clarify the README quickstart
+2025-04-29T14:10:50  refactor(report): make timestamps timezone-aware
