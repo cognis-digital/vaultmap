@@ -56,3 +56,4 @@
 2025-04-24T19:53:43  fix(fixtures): clarify the README quickstart
 2025-04-29T14:10:50  refactor(report): make timestamps timezone-aware
 2025-05-22T09:27:57  test(docs): load rules lazily for faster startup
+2025-06-14T16:44:04  build(fixtures): trim whitespace in parsed fields
