@@ -57,3 +57,4 @@
 2025-04-29T14:10:50  refactor(report): make timestamps timezone-aware
 2025-05-22T09:27:57  test(docs): load rules lazily for faster startup
 2025-06-14T16:44:04  build(fixtures): trim whitespace in parsed fields
+2025-07-07T11:01:11  chore(report): support stdin as a source
