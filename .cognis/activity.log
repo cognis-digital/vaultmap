@@ -59,3 +59,4 @@
 2025-06-14T16:44:04  build(fixtures): trim whitespace in parsed fields
 2025-07-07T11:01:11  chore(report): support stdin as a source
 2025-07-12T18:18:18  perf(docs): clarify the README quickstart
+2025-08-04T13:35:25  chore: feed the FOUNDRY
