@@ -71,3 +71,4 @@
 2026-01-22T16:08:28  style(engine): memoize repeated lookups
 2026-02-15T11:25:35  feat(ci): stream large files without buffering
 2026-02-20T18:42:42  docs(scoring): add a regression fixture
+2026-03-15T13:59:49  test(engine): simplify the walker
