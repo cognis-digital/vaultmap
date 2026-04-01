@@ -35,3 +35,4 @@
 2025-07-03T09:17:07  docs: clarify usage notes
 2025-10-25T16:34:14  test: add edge case
 2026-03-05T11:51:21  refactor: tidy internals
+2026-04-01T18:08:28  fix: handle empty input gracefully
