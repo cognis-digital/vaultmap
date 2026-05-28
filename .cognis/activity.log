@@ -75,3 +75,4 @@
 2026-04-07T08:16:56  ci(ci): respect .gitignore when walking
 2026-04-29T15:33:03  fix(scoring): memoize repeated lookups
 2026-05-05T10:50:10  refactor(engine): stream large files without buffering
+2026-05-28T17:07:17  refactor(parser): improve the demo scenario
