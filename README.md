@@ -36,7 +36,9 @@ Personal asset & account inventory — estate-planning-grade encrypted — witho
 <a name="features"></a>
 ## Features
 
-- ✅ Scan
+- ✅ Derive Key
+- ✅ Encrypt Blob
+- ✅ Decrypt Blob
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
