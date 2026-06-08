@@ -1,27 +1,11 @@
-"""VAULTMAP - Personal asset & account inventory, estate-planning-grade encrypted.
-
-A zero-install, standard-library-only tool for maintaining an encrypted
-inventory of accounts, assets, and instructions for executors/heirs.
-"""
-from .core import (
-    Vault,
-    VaultError,
-    Entry,
-    derive_key,
-    encrypt_blob,
-    decrypt_blob,
-)
-
-TOOL_NAME = "vaultmap"
-TOOL_VERSION = "1.0.0"
-
-__all__ = [
-    "Vault",
-    "VaultError",
-    "Entry",
-    "derive_key",
-    "encrypt_blob",
-    "decrypt_blob",
-    "TOOL_NAME",
-    "TOOL_VERSION",
-]
+"""vaultmap — part of the Cognis Neural Suite."""
+try:  # re-export the tool's public API + identity from core
+    from vaultmap.core import *  # noqa: F401,F403
+except Exception:  # pragma: no cover
+    pass
+try:
+    from vaultmap.core import TOOL_NAME, TOOL_VERSION
+except Exception:  # pragma: no cover
+    TOOL_NAME = "vaultmap"
+    TOOL_VERSION = "0.1.0"
+__version__ = TOOL_VERSION
