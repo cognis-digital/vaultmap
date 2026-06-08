@@ -1,0 +1,7 @@
+--id chk-001 --name "Primary Checking" --category bank --institution "First National" --identifier xxxx4821 --value 18450.00 --beneficiary "Jane Hyatt (spouse)" --location "home safe, folder A; password manager: bank/firstnat"
+--id brk-002 --name "Brokerage" --category investment --institution "Fidelity" --identifier xxxx9930 --value 142300.00 --beneficiary "Jane Hyatt (spouse)" --location "password manager: brokerage/fidelity"
+--id ira-003 --name "Roth IRA" --category retirement --institution "Vanguard" --identifier xxxx1177 --value 96120.00 --beneficiary "Jane Hyatt (50%), Sam Hyatt (50%)" --location "password manager: retirement/vanguard"
+--id btc-004 --name "Cold Wallet BTC" --category crypto --institution "Trezor" --identifier "wallet-A" --value 54000.00 --notes "seed phrase NOT stored here"
+--id hse-005 --name "Residence" --category real_estate --institution "" --identifier "123 Maple St" --value 410000.00 --beneficiary "living trust" --location "deed in fireproof box"
+--id mtg-006 --name "Mortgage" --category liability --institution "First National" --identifier xxxx7755 --value 188000.00 --beneficiary "n/a" --location "loan docs, folder B"
+--id lif-007 --name "Term Life Policy" --category insurance --institution "Northwestern Mutual" --identifier "NM-44021" --value 500000.00 --beneficiary "Jane Hyatt (spouse)" --location "policy binder, shelf 2"

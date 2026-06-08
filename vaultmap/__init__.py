@@ -1,11 +1,27 @@
-"""
-VAULTMAP — Personal asset & account inventory — estate-planning grade encrypted
-Part of the Cognis Neural Suite by Cognis Digital.
-https://cognis.digital · MIT License
-"""
-from vaultmap.core import scan, TOOL_NAME, TOOL_VERSION
+"""VAULTMAP - Personal asset & account inventory, estate-planning-grade encrypted.
 
-__version__ = TOOL_VERSION
-__author__ = "Cognis Digital"
-__license__ = "MIT"
-__all__ = ["scan", "TOOL_NAME", "TOOL_VERSION", "__version__"]
+A zero-install, standard-library-only tool for maintaining an encrypted
+inventory of accounts, assets, and instructions for executors/heirs.
+"""
+from .core import (
+    Vault,
+    VaultError,
+    Entry,
+    derive_key,
+    encrypt_blob,
+    decrypt_blob,
+)
+
+TOOL_NAME = "vaultmap"
+TOOL_VERSION = "1.0.0"
+
+__all__ = [
+    "Vault",
+    "VaultError",
+    "Entry",
+    "derive_key",
+    "encrypt_blob",
+    "decrypt_blob",
+    "TOOL_NAME",
+    "TOOL_VERSION",
+]
