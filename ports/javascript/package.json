@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/vaultmap",
+  "version": "0.2.0",
+  "description": "JavaScript port of vaultmap (Cognis Neural Suite)",
+  "bin": {
+    "vaultmap": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
