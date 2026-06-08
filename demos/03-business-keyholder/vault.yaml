@@ -1,0 +1,4 @@
+account: aws-root-account
+type: cloud
+recovery_codes: none
+beneficiary: ""

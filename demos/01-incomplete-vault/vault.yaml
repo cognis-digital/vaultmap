@@ -1,0 +1,16 @@
+account: chase
+type: checking
+recovery_codes: none
+beneficiary: ""
+
+---
+account: gmail
+type: email
+recovery_codes: none
+beneficiary: ""
+
+---
+account: aws-personal
+type: cloud
+recovery_codes: stored at home
+beneficiary: spouse

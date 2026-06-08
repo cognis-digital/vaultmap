@@ -1,0 +1,8 @@
+account: brokerage-fidelity
+type: investment
+recovery_codes: vault-physical-001
+beneficiary: spouse
+---
+account: 401k-empower
+recovery_codes: vault-physical-002
+beneficiary: spouse
