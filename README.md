@@ -20,6 +20,42 @@ pip install cognis-vaultmap
 vaultmap scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+1. **Install** (Python 3.9+):
+
+   ```bash
+   pip install vaultmap
+   ```
+
+2. **Create an encrypted vault.** Set a password once via the environment so it is not echoed:
+
+   ```bash
+   export VAULTMAP_PASSWORD='choose-a-strong-passphrase'
+   vaultmap init estate.vault
+   ```
+
+3. **Add entries** (accounts, assets, beneficiaries):
+
+   ```bash
+   vaultmap add estate.vault --id acct-1 --name "Checking" --category bank \
+     --institution "First Bank" --value 12500 --currency USD --beneficiary "Jane"
+   ```
+
+4. **List and roll up.** Filter by category, or print the estate summary as JSON for downstream tooling:
+
+   ```bash
+   vaultmap list estate.vault --category bank
+   vaultmap --format json summary estate.vault | jq .
+   ```
+
+5. **Maintain the inventory.** Remove an entry by id when an account is closed:
+
+   ```bash
+   vaultmap remove estate.vault --id acct-1
+   ```
+
+
 ## Contents
 
 - [Why vaultmap?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
