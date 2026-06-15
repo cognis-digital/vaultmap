@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from typing import List, Optional
@@ -59,7 +60,9 @@ def _emit_table(obj) -> None:
 def _do_init(args) -> int:
     pw = _get_password(args)
     if os.path.exists(args.vault) and not args.force:
-        raise VaultError(f"vault already exists: {args.vault} (use --force to overwrite)")
+        raise VaultError(
+            f"vault already exists: {args.vault} (use --force to overwrite)"
+        )
     v = Vault()
     v.save(args.vault, pw)
     _emit({"status": "created", "vault": args.vault, "tool": TOOL_NAME}, args.format)
@@ -68,6 +71,12 @@ def _do_init(args) -> int:
 
 def _do_add(args) -> int:
     pw = _get_password(args)
+    if not args.id or not args.id.strip():
+        raise VaultError("--id must not be empty")
+    if not args.name or not args.name.strip():
+        raise VaultError("--name must not be empty")
+    if not math.isfinite(args.value):
+        raise VaultError(f"--value must be a finite number, got: {args.value}")
     v = Vault.load(args.vault, pw)
     entry = Entry(
         id=args.id,
@@ -83,7 +92,10 @@ def _do_add(args) -> int:
     )
     v.add(entry)
     v.save(args.vault, pw)
-    _emit({"status": "added", "id": entry.id, "entry_count": len(v.entries)}, args.format)
+    _emit(
+        {"status": "added", "id": entry.id, "entry_count": len(v.entries)},
+        args.format,
+    )
     return 0
 
 
@@ -111,12 +123,18 @@ def _do_remove(args) -> int:
     if not v.remove(args.id):
         raise VaultError(f"no entry with id: {args.id}")
     v.save(args.vault, pw)
-    _emit({"status": "removed", "id": args.id, "entry_count": len(v.entries)}, args.format)
+    _emit(
+        {"status": "removed", "id": args.id, "entry_count": len(v.entries)},
+        args.format,
+    )
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog=TOOL_NAME, description="Encrypted personal asset & account inventory.")
+    p = argparse.ArgumentParser(
+        prog=TOOL_NAME,
+        description="Encrypted personal asset & account inventory.",
+    )
     p.add_argument("--version", action="version", version=f"{TOOL_NAME} {TOOL_VERSION}")
     p.add_argument("--format", choices=("table", "json"), default="table")
     p.add_argument("--password", help="vault password (or set $VAULTMAP_PASSWORD)")

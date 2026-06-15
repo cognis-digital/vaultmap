@@ -59,14 +59,25 @@ def _b64e(raw: bytes) -> str:
 
 
 def _b64d(s: str) -> bytes:
-    return base64.b64decode(s.encode("ascii"))
+    try:
+        return base64.b64decode(s.encode("ascii"))
+    except Exception as exc:
+        raise VaultError(f"invalid base64 data in vault: {exc}") from exc
 
 
-def derive_key(password: str, salt: bytes, iterations: int = DEFAULT_ITERATIONS) -> bytes:
+def derive_key(
+    password: str, salt: bytes, iterations: int = DEFAULT_ITERATIONS
+) -> bytes:
     """Derive a 256-bit key from a password using PBKDF2-HMAC-SHA256."""
     if not password:
         raise VaultError("password must not be empty")
-    return hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, iterations, KEY_LEN)
+    if not salt:
+        raise VaultError("salt must not be empty")
+    if not isinstance(iterations, int) or iterations < 1:
+        raise VaultError("iterations must be a positive integer")
+    return hashlib.pbkdf2_hmac(
+        "sha256", password.encode("utf-8"), salt, iterations, KEY_LEN
+    )
 
 
 def _keystream(key: bytes, nonce: bytes, length: int) -> bytes:
@@ -74,13 +85,17 @@ def _keystream(key: bytes, nonce: bytes, length: int) -> bytes:
     out = bytearray()
     counter = 0
     while len(out) < length:
-        block = hmac.new(key, nonce + counter.to_bytes(8, "big"), hashlib.sha256).digest()
+        block = hmac.new(
+            key, nonce + counter.to_bytes(8, "big"), hashlib.sha256
+        ).digest()
         out.extend(block)
         counter += 1
     return bytes(out[:length])
 
 
-def encrypt_blob(key: bytes, plaintext: bytes, nonce: Optional[bytes] = None) -> Dict[str, str]:
+def encrypt_blob(
+    key: bytes, plaintext: bytes, nonce: Optional[bytes] = None
+) -> Dict[str, str]:
     """Encrypt-then-MAC. Returns dict with nonce, ciphertext, mac (all b64)."""
     if nonce is None:
         nonce = os.urandom(NONCE_LEN)
@@ -128,7 +143,11 @@ class Entry:
 class Vault:
     """In-memory inventory with encrypted persistence."""
 
-    def __init__(self, entries: Optional[List[Entry]] = None, iterations: int = DEFAULT_ITERATIONS):
+    def __init__(
+        self,
+        entries: Optional[List[Entry]] = None,
+        iterations: int = DEFAULT_ITERATIONS,
+    ):
         self.entries: List[Entry] = entries or []
         self.iterations = iterations
 
@@ -199,10 +218,32 @@ class Vault:
         }
 
     @classmethod
-    def from_payload(cls, payload: Dict[str, Any], iterations: int = DEFAULT_ITERATIONS) -> "Vault":
+    def from_payload(
+        cls,
+        payload: Dict[str, Any],
+        iterations: int = DEFAULT_ITERATIONS,
+    ) -> "Vault":
         if payload.get("magic") != MAGIC:
             raise VaultError("payload is not a VAULTMAP document")
-        entries = [Entry(**ed).normalized() for ed in payload.get("entries", [])]
+        raw_entries = payload.get("entries", [])
+        if not isinstance(raw_entries, list):
+            raise VaultError("vault payload 'entries' must be a list")
+        entries: List[Entry] = []
+        for i, ed in enumerate(raw_entries):
+            if not isinstance(ed, dict):
+                raise VaultError(f"entry at index {i} is not a dict")
+            # Strip unknown fields so future-format vaults don't crash on load.
+            known = {f.name for f in Entry.__dataclass_fields__.values()}  # type: ignore[attr-defined]
+            filtered = {k: v for k, v in ed.items() if k in known}
+            missing = {"id", "name"} - filtered.keys()
+            if missing:
+                raise VaultError(
+                    f"entry at index {i} is missing required fields: {missing}"
+                )
+            try:
+                entries.append(Entry(**filtered).normalized())
+            except (TypeError, ValueError) as exc:
+                raise VaultError(f"entry at index {i} is invalid: {exc}") from exc
         return cls(entries=entries, iterations=iterations)
 
     # ---- encrypted file IO ------------------------------------------------
@@ -214,7 +255,11 @@ class Vault:
         doc = {
             "magic": MAGIC,
             "version": FORMAT_VERSION,
-            "kdf": {"name": "pbkdf2_sha256", "iterations": self.iterations, "salt": _b64e(salt)},
+            "kdf": {
+                "name": "pbkdf2_sha256",
+                "iterations": self.iterations,
+                "salt": _b64e(salt),
+            },
             "nonce": blob["nonce"],
             "ciphertext": blob["ciphertext"],
             "mac": blob["mac"],
@@ -233,12 +278,29 @@ class Vault:
             raise VaultError(f"vault file not found: {path}") from exc
         except (json.JSONDecodeError, OSError) as exc:
             raise VaultError(f"cannot read vault file: {exc}") from exc
+        if not isinstance(doc, dict):
+            raise VaultError("vault file is not a JSON object")
         if doc.get("magic") != MAGIC or doc.get("version") != FORMAT_VERSION:
             raise VaultError("unrecognized or unsupported vault file")
-        kdf = doc.get("kdf", {})
-        iterations = int(kdf.get("iterations", DEFAULT_ITERATIONS))
+        kdf = doc.get("kdf")
+        if not isinstance(kdf, dict):
+            raise VaultError("vault file is missing 'kdf' section")
+        if "salt" not in kdf:
+            raise VaultError("vault file 'kdf' section is missing 'salt'")
+        try:
+            iterations = int(kdf.get("iterations", DEFAULT_ITERATIONS))
+        except (TypeError, ValueError) as exc:
+            raise VaultError(f"invalid 'iterations' in vault kdf: {exc}") from exc
+        for required_field in ("nonce", "ciphertext", "mac"):
+            if required_field not in doc:
+                raise VaultError(
+                    f"vault file is missing required field: '{required_field}'"
+                )
         salt = _b64d(kdf["salt"])
         key = derive_key(password, salt, iterations)
         plaintext = decrypt_blob(key, doc["nonce"], doc["ciphertext"], doc["mac"])
-        payload = json.loads(plaintext.decode("utf-8"))
+        try:
+            payload = json.loads(plaintext.decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            raise VaultError(f"decrypted payload is not valid JSON: {exc}") from exc
         return cls.from_payload(payload, iterations=iterations)
