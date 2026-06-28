@@ -1,0 +1,20 @@
+$ vaultmap-emit --help
+
+usage: vaultmap [-h] [--version] [--format {table,json}] [--password PASSWORD]
+                {init,add,list,summary,remove} ...
+
+Encrypted personal asset & account inventory.
+
+positional arguments:
+  {init,add,list,summary,remove}
+    init                create a new encrypted vault
+    add                 add an entry
+    list                list entries
+    summary             estate rollup & readiness
+    remove              remove an entry by id
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+  --password PASSWORD   vault password (or set $VAULTMAP_PASSWORD)

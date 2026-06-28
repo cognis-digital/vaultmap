@@ -20,6 +20,82 @@ pip install cognis-vaultmap
 vaultmap scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ vaultmap-emit --version
+vaultmap 0.1.0
+```
+
+```console
+$ vaultmap-emit --help
+usage: vaultmap [-h] [--version] [--format {table,json}] [--password PASSWORD]
+                {init,add,list,summary,remove} ...
+
+Encrypted personal asset & account inventory.
+
+positional arguments:
+  {init,add,list,summary,remove}
+    init                create a new encrypted vault
+    add                 add an entry
+    list                list entries
+    summary             estate rollup & readiness
+    remove              remove an entry by id
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+  --password PASSWORD   vault password (or set $VAULTMAP_PASSWORD)
+```
+
+> Blocks above are real `vaultmap` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"findings": [
+    {
+        "id": "123456",
+        "title": "Suspicious Network Traffic",
+        "description": "Possible malicious activity detected on port 443.",
+        "created": "2023-02-15T14:30:00Z",
+        "updated": "2023-02-15T14:30:00Z",
+        "objects": [
+            {
+                "id": "obj123",
+                "type": "indicator",
+                "name": "Suspicious IP Address",
+                "description": "Potential malicious activity from 192.0.2.1"
+            }
+        ]
+    },
+    {
+        "id": "789012",
+        "title": "Unusual File Access",
+        "description": "User 'johndoe' accessed file '/home/johndoe/secret.txt'",
+        "created": "2023-02-15T14:35:00Z",
+        "updated": "2023-02-15T14:35:00Z",
+        "objects": [
+            {
+                "id": "obj456",
+                "type": "indicator",
+                "name": "Unusual File Access",
+                "description": "User 'johndoe' accessed file '/home/johndoe/secret.txt'"
+            }
+        ]
+    }
+]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. **Install** (Python 3.9+):

@@ -1,0 +1,3 @@
+$ vaultmap-emit --version
+
+vaultmap 0.1.0
